@@ -1,0 +1,142 @@
+<context>
+# Overview  
+AURA is a headless ecommerce platform designed to be the digital flagship for curated luxury goods. It solves the problem of generic, slow, and uninspired online shopping experiences in the high-end market by providing a visually stunning, minimalist, and performant interface.
+
+The platform is for discerning, tech-savvy consumers who value design, craftsmanship, and a seamless user experience. AURA's value lies in its brand-first approach: the platform itself is an extension of the luxury products it sells, creating a cohesive and exclusive atmosphere that builds trust and drives conversions.
+
+# Core Features  
+1. Elegant Product Discovery
+- What it does: Allows users to explore the product catalog through a visually rich homepage, a clean product listing grid, and intuitive filtering/sorting options.
+- Why it's important: For luxury items, inspiration and discovery are as crucial as direct searching. This feature captures the feeling of browsing a high-end boutique.
+- How it works at a high level: The homepage uses full-bleed imagery to feature key collections. The Product Listing Page (PLP) displays items in a stark grid. Filters (category, brand, size) are applied client-side for an instantaneous response without a page reload.
+
+2. Immersive Product Evaluation
+- What it does: Provides a dedicated Product Detail Page (PDP) that showcases items with high-resolution imagery, detailed descriptions, and rich media.
+- Why it's important: Customers cannot physically touch the products, so the PDP must compensate by offering a comprehensive and convincing digital equivalent.
+- How it works at a high level: The PDP features a gallery of professional photos with zoom capability, product videos, and potentially 360° views. It clearly presents the price, specifications (materials, dimensions), and a prominent "Add to Cart" call-to-action.
+
+3. Frictionless Transactional Flow
+- What it does: Enables users to add items to a cart, review their selection, and complete a purchase through a secure and streamlined checkout process.
+- Why it's important: A complicated or untrustworthy checkout is the single biggest cause of abandoned carts. This feature ensures the final step is effortless and builds confidence.
+- How it works at a high level: An "Add to Cart" action opens a non-intrusive side-drawer for a quick summary. The dedicated checkout page is a multi-step form (Shipping -> Payment -> Review) powered by Stripe's secure UI elements to handle sensitive payment information.
+
+4. Personalized User Account Management
+- What it does: Allows users to create an account to view their order history, manage saved addresses, and track shipments.
+- Why it's important: Fosters customer loyalty and simplifies the process for repeat purchases, a key goal for a luxury brand.
+- How it works at a high level: Uses a secure authentication system. Once logged in, the user has access to a dashboard that fetches and displays their order data and saved profile information.
+
+# User Experience  
+User Personas:
+- The Modern Professional (Victoria, 32): Tech-savvy, values aesthetics and efficiency. Shops on her phone during commutes. Expects a flawless mobile experience and a quick, secure checkout.
+- The Connoisseur (Marcus, 48): Values craftsmanship and detail. Researches purchases carefully. Needs high-resolution imagery, detailed material descriptions, and a sense of trust and exclusivity from the site.
+
+Key User Flows:
+- Discovery to Purchase: Homepage → Product Listing Page → (Apply Filter) → Product Detail Page → Add to Cart → Checkout → Order Confirmation. This is the primary conversion path.
+- Direct Search: Header Search Bar → Search Results Page → Product Detail Page → Add to Cart.
+- Returning Customer: Login → Account Dashboard → View Past Orders or Shop New Arrivals.
+
+UI/UX Considerations:
+- Monochromatic Theme: A strict black, white, and gray palette creates a dramatic canvas that makes product imagery the hero.
+- Minimalism: Generous use of negative space, clean lines, and an absence of clutter. Every element serves a purpose.
+- Typography: A single, elegant sans-serif typeface (e.g., Inter) is used to create hierarchy and communicate sophistication.
+- Fluid Motion: Subtle, performant animations (using Framer Motion) on page transitions, image loads, and interactive elements provide a feeling of quality and responsiveness.
+</context>
+
+<PRD>
+# Technical Architecture  
+System Components:
+- Frontend: A Next.js 14 (App Router) application deployed on Vercel. Responsible for all rendering, UI, and user interaction.
+- Headless CMS: Sanity.io. Acts as the database for all product information, categories, brands, and marketing content.
+- Payment Gateway: Stripe. Handles all payment processing, ensuring PCI compliance and security. The frontend integrates with the Stripe API.
+- Hosting & CI/CD: Vercel. Provides serverless hosting, automatic deployments on Git push, and global CDN for performance.
+
+Data Models (in Sanity.io):
+- product: Fields include name (string), slug (slug), brand (reference to brand), category (reference to category), images (array of images), price (number), description (rich text), details (array of key-value pairs), variants (array of objects: e.g., {size: 'M', stock: 10}).
+- category: Fields include name (string), slug (slug).
+- brand: Fields include name (string), logo (image).
+- order: Fields include orderId (string), userEmail (string), items (JSON), totalAmount (number), shippingAddress (JSON), status (string).
+
+APIs and Integrations:
+- Sanity API: The Next.js frontend fetches all content (products, categories) via GROQ queries to the Sanity API.
+- Stripe API: The frontend client communicates with Stripe.js to tokenize payment information. A serverless function is used to securely create the Payment Intent and confirm the charge.
+
+Infrastructure Requirements:
+- A Vercel account for deployment
+- A Sanity.io project space
+- A Stripe account with API keys configured
+
+# Development Roadmap  
+Phase 1: MVP - The Core Transactional Experience
+The goal of this phase is to build a fully functional, end-to-end shopping experience. A user must be able to discover a product and purchase it.
+- Setup: Initialize Next.js project with TypeScript, Tailwind CSS, and shadcn/ui
+- CMS Foundation: Define product, category, and brand schemas in Sanity.io and populate with initial data
+- Product Display: Build the Product Listing Page (PLP) and Product Detail Page (PDP)
+- Core Cart Logic: Implement a client-side shopping cart using Zustand or React Context
+- Checkout Flow: Build the multi-step checkout form and integrate Stripe API for payment processing
+- Static Pages: Create basic About and Contact pages
+
+Phase 2: Enhancing User Engagement & Polish
+The goal of this phase is to build features that improve usability and encourage repeat visits.
+- User Authentication: Implement sign-up, login, and logout functionality
+- User Dashboard: Create an account page for order history and saved addresses
+- Advanced Search: Implement a search bar with type-ahead functionality
+- Advanced Filtering: Build UI and logic for filtering the PLP by category, brand, and other attributes
+- UI Polish: Implement subtle animations and page transitions with Framer Motion
+
+Phase 3: Future Enhancements & Scalability
+The goal of this phase is to add features that build community and expand business capabilities.
+- Wishlist: Allow users to save products to a personal wishlist
+- Customer Reviews: Implement a system for users to leave ratings and reviews on products
+- Advanced Rich Media: Integrate 360° product viewers for key items
+- Internationalization (i18n): Add support for multiple currencies and languages
+
+# Logical Dependency Chain
+Foundation First (Setup & CMS): The absolute first step is setting up the Next.js project and the Sanity CMS schema. Without a data structure and a place to host the code, nothing else can be built.
+
+Build the "Read" Path (Visible Frontend):
+- Develop the connection to Sanity
+- Build the Product Listing Page (PLP) - the first piece of visible UI that proves the data connection works
+- Build the Product Detail Page (PDP) - logically depends on having a list of products to click from (the PLP)
+
+Build the "Write" Path (Transactional Core):
+- Implement the client-side Shopping Cart - this state is required before checkout can be built
+- Develop the Checkout Page and integrate Stripe - this makes the site functional as a store and completes the MVP loop
+
+Layer on User-Specific State:
+- Implement User Authentication - prerequisite for any personalized features
+- Build the User Dashboard - depends on a user being logged in to fetch their specific data (like orders)
+
+Refine and Enhance: Features like Search, Filtering, and Animations can be built last, as they improve an already-working system rather than providing core functionality.
+
+# Risks and Mitigations  
+Technical Challenges:
+- Risk: Technical complexity of headless stack
+- Mitigation: Use official starter kits and documentation from Next.js, Sanity, and Stripe. Build small Proof-of-Concept (POC) projects for each integration before combining them.
+
+- Risk: Performance degradation
+- Mitigation: Enforce performance best practices from day one: use Next.js Image component for optimization, leverage SSG/ISR appropriately, and run Lighthouse reports as part of the pre-deployment checklist.
+
+Figuring out the MVP:
+- Risk: Scope creep in MVP
+- Mitigation: Adhere strictly to the "Phase 1" roadmap. Any new feature requests must be deferred to Phase 2 or 3. This PRD serves as the formal agreement on MVP scope.
+
+- Risk: Poor quality product media
+- Mitigation: Establish a mandatory "Content Style Guide" for all photography and videography before development begins. The luxury aesthetic is entirely dependent on this.
+
+Resource Constraints:
+- Risk: Limited development resources
+- Mitigation: Focus on core functionality first and leverage existing solutions (Stripe for payments, Sanity for CMS) to reduce custom development overhead.
+
+# Appendix  
+Non-Functional Requirements Summary:
+- Performance: Achieve a Lighthouse score of 90+. LCP < 2.5s
+- Accessibility: WCAG 2.1 AA compliant
+- Security: HTTPS only, no sensitive data stored on our servers, full PCI compliance via Stripe
+- Responsiveness: Flawless experience on mobile, tablet, and desktop
+
+Key Technology Choices:
+- Next.js: For its performance (SSR/SSG), strong ecosystem, and Vercel integration
+- shadcn/ui: For its unstyled, accessible, and composable components that allow for a fully custom design system
+- Sanity.io: For its flexible, real-time content modeling and generous free tier
+- Stripe: For its developer-friendly APIs and robust, secure payment infrastructure
+</PRD>

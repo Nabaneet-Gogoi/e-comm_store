@@ -1,0 +1,11 @@
+# Task ID: 9
+# Title: Develop User Account Dashboard
+# Status: pending
+# Dependencies: 7, 8
+# Priority: medium
+# Description: Create a personalized user account dashboard accessible after login. This dashboard should display the user's order history and allow them to manage saved shipping addresses.
+# Details:
+Fetch order data associated with the logged-in user. Provide clear UI for viewing past orders and editing address details.
+
+# Test Strategy:
+Log in as a test user and verify order history is displayed correctly. Test adding/editing/deleting saved addresses.

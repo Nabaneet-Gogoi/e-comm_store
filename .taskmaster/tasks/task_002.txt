@@ -1,0 +1,11 @@
+# Task ID: 2
+# Title: Sanity CMS Schema and Initial Data Population
+# Status: pending
+# Dependencies: 1
+# Priority: high
+# Description: Define and implement the Sanity.io content schemas for `product`, `category`, `brand`, and `order` data models. Populate the CMS with initial sample data for testing and development purposes.
+# Details:
+Define fields as per PRD: `product` (name, slug, brand, category, images, price, description, details, variants), `category` (name, slug), `brand` (name, logo), `order` (orderId, userEmail, items, totalAmount, shippingAddress, status).
+
+# Test Strategy:
+Verify that schemas are correctly defined in Sanity Studio. Confirm sample data can be created and viewed within the CMS.

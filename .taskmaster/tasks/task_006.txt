@@ -1,0 +1,11 @@
+# Task ID: 6
+# Title: Implement Client-Side Shopping Cart Logic
+# Status: pending
+# Dependencies: 5
+# Priority: high
+# Description: Develop the core client-side shopping cart functionality. This includes adding/removing items, updating quantities, and displaying a summary. Implement a non-intrusive side-drawer for quick cart review.
+# Details:
+Use Zustand or React Context for state management. The side-drawer should appear on "Add to Cart" action.
+
+# Test Strategy:
+Test adding various products, updating quantities, and removing items. Verify cart total and item counts are accurate. Confirm side-drawer opens and displays correct summary.

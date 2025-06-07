@@ -1,0 +1,11 @@
+# Task ID: 5
+# Title: Develop Product Detail Page (PDP)
+# Status: pending
+# Dependencies: 3, 4
+# Priority: high
+# Description: Create the Product Detail Page (PDP) to provide an immersive product evaluation experience. Include high-resolution image galleries with zoom, detailed descriptions, specifications, and a prominent "Add to Cart" call-to-action.
+# Details:
+Support multiple images, potentially video or 360° views (as a future enhancement, but design for it). Clearly present price, materials, and dimensions.
+
+# Test Strategy:
+Verify all product information is displayed correctly. Test image gallery functionality and zoom. Confirm "Add to Cart" button is visible and clickable.

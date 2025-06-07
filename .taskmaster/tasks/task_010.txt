@@ -1,0 +1,11 @@
+# Task ID: 10
+# Title: UI Polish, Animations, and Performance Optimization
+# Status: pending
+# Dependencies: 4, 5, 6, 7, 9
+# Priority: medium
+# Description: Implement subtle, performant animations using Framer Motion for page transitions, image loads, and interactive elements. Conduct performance audits to achieve a Lighthouse score of 90+ and LCP < 2.5s.
+# Details:
+Focus on fluid motion and responsiveness. Optimize all images using Next.js Image component. Implement SSG/ISR where beneficial.
+
+# Test Strategy:
+Run Lighthouse audits regularly. Visually inspect animations and transitions for smoothness. Test responsiveness across various devices and screen sizes.

@@ -1,0 +1,11 @@
+# Task ID: 7
+# Title: Build Secure Checkout Flow with Stripe Integration
+# Status: pending
+# Dependencies: 6
+# Priority: high
+# Description: Develop the multi-step checkout process (Shipping -> Payment -> Review). Integrate Stripe.js for secure client-side payment tokenization and implement a serverless function to create and confirm Stripe Payment Intents.
+# Details:
+Ensure PCI compliance by using Stripe's secure UI elements. Handle shipping address collection and display order summary before final confirmation.
+
+# Test Strategy:
+Conduct end-to-end testing of the checkout flow with test Stripe credentials. Verify successful payment processing and order creation in Sanity (if `order` schema is used for this).

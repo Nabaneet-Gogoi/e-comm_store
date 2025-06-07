@@ -1,0 +1,193 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Project Setup and Initial Configuration",
+      "description": "Initialize the Next.js 14 project using the App Router, configure TypeScript, integrate Tailwind CSS for styling, and set up shadcn/ui components. Establish the Vercel deployment pipeline for continuous integration and deployment.",
+      "details": "Use `create-next-app` with TypeScript. Configure `tailwind.config.js` and `components.json` for shadcn/ui. Set up a Git repository and link to Vercel.",
+      "testStrategy": "Verify successful project build and deployment to Vercel. Confirm Tailwind CSS and shadcn/ui components are correctly integrated and render.",
+      "priority": "high",
+      "dependencies": [],
+      "status": "in-progress",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Initialize Next.js 14 Project with TypeScript and Git",
+          "description": "Create a new Next.js 14 project using `create-next-app`, ensuring App Router and TypeScript are enabled. Initialize a Git repository for version control.",
+          "dependencies": [],
+          "details": "Execute `npx create-next-app@latest project-name --ts --app`. Navigate into the newly created `project-name` directory. Initialize a Git repository by running `git init` and make an initial commit (e.g., `git add . && git commit -m \"Initial project setup\"`).",
+          "status": "pending",
+          "testStrategy": "Verify `package.json` contains `next`, `react`, `react-dom`, and `typescript` dependencies. Confirm the presence of the `app` directory and `tsconfig.json`. Check that the `.git` directory exists."
+        },
+        {
+          "id": 2,
+          "title": "Integrate Tailwind CSS",
+          "description": "Configure Tailwind CSS within the Next.js project to enable utility-first styling capabilities.",
+          "dependencies": [
+            1
+          ],
+          "details": "Follow the official Next.js Tailwind CSS setup guide. Run `npx tailwindcss init -p` to generate `tailwind.config.js` and `postcss.config.js`. Update `tailwind.config.js` to include paths to all template files (e.g., `content: ['./pages/**/*.{js,ts,jsx,tsx,mdx}', './components/**/*.{js,ts,jsx,tsx,mdx}', './app/**/*.{js,ts,jsx,tsx,mdx}', './src/**/*.{js,ts,jsx,tsx,mdx}']`). Add the Tailwind directives (`@tailwind base; @tailwind components; @tailwind utilities;`) to `src/app/globals.css`.",
+          "status": "pending",
+          "testStrategy": "Run `npm run dev`. Add a simple HTML element with Tailwind classes (e.g., `<div className='bg-blue-500 text-white p-4'>Hello Tailwind!</div>`) to `src/app/page.tsx`. Verify that the styles are applied correctly in the browser."
+        },
+        {
+          "id": 3,
+          "title": "Set up shadcn/ui Components",
+          "description": "Initialize and configure shadcn/ui within the project, allowing for easy integration of pre-built UI components that leverage Tailwind CSS.",
+          "dependencies": [
+            2
+          ],
+          "details": "Execute `npx shadcn-ui@latest init`. Follow the interactive prompts, ensuring the configuration aligns with Next.js, TypeScript, and Tailwind CSS. Select 'app' for the components alias and 'components' for the UI alias. Choose a base color (e.g., 'slate' or 'zinc'). Verify that `components.json` is created at the project root and `lib/utils.ts` is present.",
+          "status": "pending",
+          "testStrategy": "Add a sample shadcn/ui component (e.g., `npx shadcn-ui@latest add button`). Import the `Button` component into `src/app/page.tsx` and render it. Run `npm run dev` and verify the button renders correctly with its default styles in the browser."
+        },
+        {
+          "id": 4,
+          "title": "Configure Vercel Deployment Pipeline",
+          "description": "Establish the continuous integration and deployment pipeline by linking the Git repository to Vercel, enabling automatic deployments on code pushes.",
+          "dependencies": [
+            1
+          ],
+          "details": "Create a new project on Vercel.com. Connect the Git repository initialized in Subtask 1. Vercel should automatically detect it's a Next.js project. Accept the default build and output settings. Trigger the first deployment manually from the Vercel dashboard if it doesn't start automatically after linking.",
+          "status": "pending",
+          "testStrategy": "Verify that the Vercel dashboard shows a successful deployment for the linked repository. Access the provided Vercel deployment URL to confirm the default Next.js welcome page is live and accessible."
+        },
+        {
+          "id": 5,
+          "title": "Verify Component Integration and CI/CD Flow",
+          "description": "Confirm that shadcn/ui components are correctly integrated and that changes pushed to the Git repository trigger a successful, automated deployment on Vercel, reflecting the latest code.",
+          "dependencies": [
+            3,
+            4
+          ],
+          "details": "Modify `src/app/page.tsx` to include a shadcn/ui component (e.g., a `Button` or `Card`) and apply some custom Tailwind styling to it. Commit these changes to your Git repository (e.g., `git add . && git commit -m \"Add shadcn/ui component and test Tailwind\"`). Push the changes to your remote Git repository (e.g., `git push origin main`). Monitor the Vercel dashboard to ensure a new deployment is triggered automatically and completes successfully.",
+          "status": "pending",
+          "testStrategy": "Once the Vercel deployment completes, access the deployed URL. Verify that the newly added shadcn/ui component is visible on the page and that any custom Tailwind styling applied to it is correctly rendered. This confirms both component integration and the CI/CD pipeline are functional."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Sanity CMS Schema and Initial Data Population",
+      "description": "Define and implement the Sanity.io content schemas for `product`, `category`, `brand`, and `order` data models. Populate the CMS with initial sample data for testing and development purposes.",
+      "details": "Define fields as per PRD: `product` (name, slug, brand, category, images, price, description, details, variants), `category` (name, slug), `brand` (name, logo), `order` (orderId, userEmail, items, totalAmount, shippingAddress, status).",
+      "testStrategy": "Verify that schemas are correctly defined in Sanity Studio. Confirm sample data can be created and viewed within the CMS.",
+      "priority": "high",
+      "dependencies": [
+        1
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 3,
+      "title": "Sanity Data Integration and API Layer",
+      "description": "Develop the data fetching layer in the Next.js frontend to interact with the Sanity API. Implement GROQ queries to retrieve product, category, and brand information efficiently.",
+      "details": "Create utility functions or hooks for fetching data. Consider server-side rendering (SSR) or static site generation (SSG) where appropriate for performance.",
+      "testStrategy": "Write unit tests for data fetching functions. Verify that product, category, and brand data can be successfully retrieved and logged in the Next.js application.",
+      "priority": "high",
+      "dependencies": [
+        2
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 4,
+      "title": "Develop Product Listing Page (PLP)",
+      "description": "Build the visually rich Product Listing Page (PLP) UI. Display products in a minimalist grid layout. Implement client-side filtering and sorting options for categories, brands, and sizes.",
+      "details": "Utilize Next.js Image component for product images. Ensure responsiveness across mobile, tablet, and desktop. Basic filtering should be instantaneous.",
+      "testStrategy": "Verify correct display of products. Test filtering and sorting functionality for accuracy and responsiveness. Check layout on different screen sizes.",
+      "priority": "high",
+      "dependencies": [
+        3
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 5,
+      "title": "Develop Product Detail Page (PDP)",
+      "description": "Create the Product Detail Page (PDP) to provide an immersive product evaluation experience. Include high-resolution image galleries with zoom, detailed descriptions, specifications, and a prominent \"Add to Cart\" call-to-action.",
+      "details": "Support multiple images, potentially video or 360° views (as a future enhancement, but design for it). Clearly present price, materials, and dimensions.",
+      "testStrategy": "Verify all product information is displayed correctly. Test image gallery functionality and zoom. Confirm \"Add to Cart\" button is visible and clickable.",
+      "priority": "high",
+      "dependencies": [
+        3,
+        4
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 6,
+      "title": "Implement Client-Side Shopping Cart Logic",
+      "description": "Develop the core client-side shopping cart functionality. This includes adding/removing items, updating quantities, and displaying a summary. Implement a non-intrusive side-drawer for quick cart review.",
+      "details": "Use Zustand or React Context for state management. The side-drawer should appear on \"Add to Cart\" action.",
+      "testStrategy": "Test adding various products, updating quantities, and removing items. Verify cart total and item counts are accurate. Confirm side-drawer opens and displays correct summary.",
+      "priority": "high",
+      "dependencies": [
+        5
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 7,
+      "title": "Build Secure Checkout Flow with Stripe Integration",
+      "description": "Develop the multi-step checkout process (Shipping -> Payment -> Review). Integrate Stripe.js for secure client-side payment tokenization and implement a serverless function to create and confirm Stripe Payment Intents.",
+      "details": "Ensure PCI compliance by using Stripe's secure UI elements. Handle shipping address collection and display order summary before final confirmation.",
+      "testStrategy": "Conduct end-to-end testing of the checkout flow with test Stripe credentials. Verify successful payment processing and order creation in Sanity (if `order` schema is used for this).",
+      "priority": "high",
+      "dependencies": [
+        6
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 8,
+      "title": "Implement User Authentication System",
+      "description": "Develop the secure user authentication system, enabling sign-up, login, and logout functionalities. This includes handling user sessions and secure credential management.",
+      "details": "Use a secure authentication system (e.g., NextAuth.js or custom solution with bcrypt for password hashing). Focus on security best practices.",
+      "testStrategy": "Test user registration, login with valid/invalid credentials, and logout. Verify session management.",
+      "priority": "medium",
+      "dependencies": [
+        1
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 9,
+      "title": "Develop User Account Dashboard",
+      "description": "Create a personalized user account dashboard accessible after login. This dashboard should display the user's order history and allow them to manage saved shipping addresses.",
+      "details": "Fetch order data associated with the logged-in user. Provide clear UI for viewing past orders and editing address details.",
+      "testStrategy": "Log in as a test user and verify order history is displayed correctly. Test adding/editing/deleting saved addresses.",
+      "priority": "medium",
+      "dependencies": [
+        7,
+        8
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 10,
+      "title": "UI Polish, Animations, and Performance Optimization",
+      "description": "Implement subtle, performant animations using Framer Motion for page transitions, image loads, and interactive elements. Conduct performance audits to achieve a Lighthouse score of 90+ and LCP < 2.5s.",
+      "details": "Focus on fluid motion and responsiveness. Optimize all images using Next.js Image component. Implement SSG/ISR where beneficial.",
+      "testStrategy": "Run Lighthouse audits regularly. Visually inspect animations and transitions for smoothness. Test responsiveness across various devices and screen sizes.",
+      "priority": "medium",
+      "dependencies": [
+        4,
+        5,
+        6,
+        7,
+        9
+      ],
+      "status": "pending",
+      "subtasks": []
+    }
+  ]
+}

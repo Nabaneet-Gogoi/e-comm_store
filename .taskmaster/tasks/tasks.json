@@ -77,7 +77,63 @@
         1
       ],
       "status": "pending",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Define Core Sanity Schemas: Category and Brand",
+          "description": "Define the Sanity.io content schemas for `category` and `brand` data models. These are foundational and simpler schemas that `product` will depend on.",
+          "dependencies": [],
+          "details": "Create `category.js` and `brand.js` schema files in the Sanity studio's `schemas` directory. For `category`, define `name` (string) and `slug` (slug, unique). For `brand`, define `name` (string) and `logo` (image). Ensure `slug` fields are configured to auto-generate from the `name` field.",
+          "status": "pending",
+          "testStrategy": "Verify that the 'Category' and 'Brand' document types appear correctly in the Sanity Studio UI. Attempt to create new documents for each to ensure fields are present and validation (e.g., unique slug) works."
+        },
+        {
+          "id": 2,
+          "title": "Define Product Sanity Schema",
+          "description": "Define the Sanity.io content schema for the `product` data model, incorporating references to `category` and `brand`.",
+          "dependencies": [
+            1
+          ],
+          "details": "Create `product.js` schema file. Define fields: `name` (string), `slug` (slug, unique), `brand` (reference to `brand` document), `category` (reference to `category` document), `images` (array of images), `price` (number), `description` (block content), `details` (array of objects for key-value pairs), `variants` (array of objects for product variations like size/color with price/stock). Ensure references are correctly configured to point to the respective document types.",
+          "status": "pending",
+          "testStrategy": "Verify the 'Product' document type appears in the Sanity Studio. Attempt to create a new product, ensuring brand and category dropdowns correctly list existing documents and that image uploads, block content, and array fields function as expected."
+        },
+        {
+          "id": 3,
+          "title": "Define Order Sanity Schema",
+          "description": "Define the Sanity.io content schema for the `order` data model.",
+          "dependencies": [
+            2
+          ],
+          "details": "Create `order.js` schema file. Define fields: `orderId` (string, unique), `userEmail` (string, email validation), `items` (array of objects, each containing a reference to `product` and a `quantity` number), `totalAmount` (number), `shippingAddress` (object with address fields like street, city, postalCode, country), `status` (string, enum/list of options like 'pending', 'processing', 'shipped', 'delivered', 'cancelled'). Consider making `orderId` auto-generated or using a custom input component.",
+          "status": "pending",
+          "testStrategy": "Verify the 'Order' document type appears in the Sanity Studio. Attempt to create a new order, ensuring all fields are present and that the `items` array can correctly reference products and store quantity."
+        },
+        {
+          "id": 4,
+          "title": "Populate Initial Sample Data: Categories and Brands",
+          "description": "Populate the Sanity CMS with initial sample data for `category` and `brand` documents. This data will be used for development and testing, and will be referenced by product data.",
+          "dependencies": [
+            1
+          ],
+          "details": "Manually create 3-5 sample `category` documents (e.g., 'Electronics', 'Apparel', 'Home Goods') and 3-5 sample `brand` documents (e.g., 'Acme Corp', 'Globex Inc.', 'Cyberdyne Systems') directly within the Sanity Studio UI. Ensure slugs are generated correctly and logos are uploaded for brands.",
+          "status": "pending",
+          "testStrategy": "Navigate to the 'Category' and 'Brand' sections in the Sanity Studio. Confirm that the created sample documents are visible, accessible, and their data is correctly displayed."
+        },
+        {
+          "id": 5,
+          "title": "Populate Initial Sample Data: Products and Orders",
+          "description": "Populate the Sanity CMS with initial sample data for `product` and `order` documents, referencing the previously created categories and brands.",
+          "dependencies": [
+            2,
+            3,
+            4
+          ],
+          "details": "Manually create 5-10 sample `product` documents in the Sanity Studio. For each product, select appropriate categories and brands from the dropdowns populated in the previous step. Upload multiple images, add descriptions, and define variants. Create 2-3 sample `order` documents, ensuring they reference some of the newly created products in their `items` array and have realistic `totalAmount` and `shippingAddress` details.",
+          "status": "pending",
+          "testStrategy": "Navigate to the 'Product' and 'Order' sections in the Sanity Studio. Verify that all created sample documents are present. Open a few product documents to confirm references to categories/brands, images, and variants are correctly displayed. Open order documents to ensure product references within `items` are correct and all order details are visible."
+        }
+      ]
     },
     {
       "id": 3,
@@ -90,7 +146,63 @@
         2
       ],
       "status": "pending",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Configure Sanity Client and Establish Connection",
+          "description": "Set up the Sanity client in the Next.js project, ensuring secure and efficient access to the Sanity API.",
+          "dependencies": [],
+          "details": "Install the `@sanity/client` package. Create a utility file (e.g., `lib/sanity.js`) to initialize the Sanity client using environment variables for `projectId`, `dataset`, and `apiVersion`. Ensure these environment variables are properly configured in `.env.local`.",
+          "status": "pending",
+          "testStrategy": "Add a temporary `console.log` in `_app.js` or a dedicated test page to confirm client initialization and attempt a basic, non-destructive query (e.g., `client.fetch('*[_type == \"product\"][0]{_id}')`) to verify successful connection and data retrieval."
+        },
+        {
+          "id": 2,
+          "title": "Develop Core GROQ Queries for Products and Categories",
+          "description": "Write efficient GROQ queries to retrieve essential product and category data from the Sanity content lake.",
+          "dependencies": [
+            1
+          ],
+          "details": "Define specific GROQ queries for: 1) Fetching all products with key fields (e.g., `_id`, `title`, `slug`, `price`, `mainImage`). 2) Fetching a single product by its slug. 3) Fetching all categories with `_id`, `title`, `slug`. 4) Fetching products filtered by a specific category slug. Store these queries in a dedicated file (e.g., `lib/sanityQueries.js`).",
+          "status": "pending",
+          "testStrategy": "Utilize Sanity Studio's Vision plugin to test each developed GROQ query individually. Verify that the queries return the expected data structure and content, and handle edge cases (e.g., non-existent slugs) gracefully."
+        },
+        {
+          "id": 3,
+          "title": "Implement Reusable Sanity Data Fetching Utilities",
+          "description": "Create a set of reusable utility functions or custom hooks that encapsulate the Sanity data fetching logic, making it easy to integrate into Next.js components and pages.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "In `lib/sanity.js` (or a new `utils/sanity.js`), export functions such as `getProducts()`, `getProduct(slug)`, `getCategories()`, and `getProductsByCategory(categorySlug)`. These functions should use the initialized Sanity client (from Subtask 1) and the GROQ queries (from Subtask 2) to fetch and return data. Consider adding basic error handling.",
+          "status": "pending",
+          "testStrategy": "Create a simple, temporary Next.js page (e.g., `/dev/test-data`) that imports and calls each of these new utility functions. Log the fetched data to the console to verify that the functions correctly retrieve and format the data from Sanity."
+        },
+        {
+          "id": 4,
+          "title": "Integrate Product and Category Data with Next.js Pages (SSR/SSG)",
+          "description": "Apply the developed data fetching utilities to populate key Next.js pages, leveraging server-side rendering (SSR) or static site generation (SSG) for optimal performance.",
+          "dependencies": [
+            3
+          ],
+          "details": "Implement data fetching for: 1) Product listing page (e.g., `/products`) using `getStaticProps` for SSG. 2) Individual product detail pages (e.g., `/products/[slug]`) using `getStaticPaths` and `getStaticProps` for SSG. 3) Category listing page (e.g., `/categories`) using `getStaticProps`. 4) Products by category pages (e.g., `/categories/[slug]`) using `getStaticPaths` and `getStaticProps`. Ensure proper data hydration on the client side.",
+          "status": "pending",
+          "testStrategy": "Build and run the Next.js application. Navigate to all implemented pages (product list, individual product, category list, category-filtered products). Verify that data is correctly displayed. Use browser developer tools to confirm whether pages are rendered via SSG or SSR as intended (e.g., check network requests, view page source)."
+        },
+        {
+          "id": 5,
+          "title": "Implement Brand Data Fetching and Refine API Layer",
+          "description": "Extend the data fetching layer to include brand information and perform a general refinement pass on the existing API layer for robustness, efficiency, and consistency.",
+          "dependencies": [
+            3,
+            4
+          ],
+          "details": "Define new GROQ queries for fetching all brands and a single brand by slug. Add corresponding utility functions (e.g., `getBrands()`, `getBrand(slug)`) to `lib/sanity.js`. Integrate brand data into relevant pages (e.g., a dedicated brands page or product detail pages). Review existing queries and fetching utilities for potential optimizations (e.g., more specific projections, better error handling, caching strategies if applicable).",
+          "status": "pending",
+          "testStrategy": "Verify that brand data is fetched and displayed correctly on all relevant pages. Conduct a comprehensive review of all integrated pages to ensure consistent data display, efficient loading, and proper error handling. Perform a final check for any unhandled edge cases or performance bottlenecks."
+        }
+      ]
     },
     {
       "id": 4,
@@ -103,7 +215,65 @@
         3
       ],
       "status": "pending",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Setup PLP Page Structure and Basic Product Grid Display",
+          "description": "Create the main Product Listing Page (PLP) component and establish the basic minimalist grid layout. Fetch and display a static or mock list of product data, utilizing the Next.js Image component for product visuals.",
+          "dependencies": [],
+          "details": "Create a new Next.js page for the PLP (e.g., `pages/products/index.js`). Define a simple array of mock product objects (id, name, imageUrl, category, brand, price, sizes). Render these products in a CSS Grid or Flexbox layout to achieve the minimalist grid. Ensure each product image uses `<Image>` from `next/image` with appropriate `width`, `height`, and `alt` props.",
+          "status": "pending",
+          "testStrategy": "Verify the PLP loads correctly, displays all mock products in a grid, and product images are rendered via Next.js Image component (check network tab for optimized images)."
+        },
+        {
+          "id": 2,
+          "title": "Implement Client-Side Filtering UI and Logic",
+          "description": "Develop the user interface for filtering options (categories, brands, sizes) and implement the client-side JavaScript logic to filter the displayed products instantaneously based on user selections.",
+          "dependencies": [
+            1
+          ],
+          "details": "Add filter controls (e.g., checkboxes, dropdowns) for categories, brands, and sizes to the PLP. Use React state to manage selected filters. Implement a client-side filtering function that takes the raw product data and the current filter selections, returning a filtered subset. Update the displayed products dynamically without page reloads. Ensure filtering is performant for a reasonable number of products.",
+          "status": "pending",
+          "testStrategy": "Test each filter type (category, brand, size) individually and in combination. Verify that selecting/deselecting filters correctly updates the displayed product list instantly. Check edge cases like no products matching filters."
+        },
+        {
+          "id": 3,
+          "title": "Implement Client-Side Sorting UI and Logic",
+          "description": "Develop the user interface for sorting options (e.g., by price, name) and implement the client-side JavaScript logic to sort the currently displayed products.",
+          "dependencies": [
+            1
+          ],
+          "details": "Add a sorting control (e.g., a dropdown) with options like 'Price: Low to High', 'Price: High to Low', 'Name: A-Z'. Implement a client-side sorting function that takes the currently filtered product data and the selected sort order, returning a sorted array. Apply sorting to the products *after* filtering has been applied. Update the displayed products dynamically.",
+          "status": "pending",
+          "testStrategy": "Test each sorting option (e.g., price ascending/descending, name A-Z). Verify that products are reordered correctly based on the selected sort criteria. Ensure sorting works correctly when filters are also applied."
+        },
+        {
+          "id": 4,
+          "title": "Ensure Responsiveness Across Devices",
+          "description": "Adapt the PLP layout, product grid, and filtering/sorting controls to be fully responsive across mobile, tablet, and desktop screen sizes.",
+          "dependencies": [
+            1,
+            2,
+            3
+          ],
+          "details": "Utilize CSS media queries or a responsive framework (e.g., Tailwind CSS, Bootstrap) to adjust the grid column count, spacing, font sizes, and filter/sort control placement for different breakpoints. Ensure product images scale appropriately and maintain aspect ratio. Test on various device emulators or actual devices.",
+          "status": "pending",
+          "testStrategy": "Use browser developer tools to simulate mobile, tablet, and desktop viewports. Verify that the grid layout adjusts, filters/sort controls are usable, and all elements are correctly positioned and sized without overflow or visual glitches on each breakpoint."
+        },
+        {
+          "id": 5,
+          "title": "Refine Performance and User Experience",
+          "description": "Optimize the client-side filtering and sorting for instantaneous response times and enhance the overall user experience of the PLP.",
+          "dependencies": [
+            2,
+            3,
+            4
+          ],
+          "details": "Review the filtering and sorting logic for potential performance bottlenecks. Consider using `React.useMemo` to memoize filtered/sorted product lists to prevent unnecessary re-calculations. Implement a 'Clear All Filters' button. Ensure smooth transitions or state updates. Add accessibility considerations where applicable (e.g., ARIA attributes for filter controls).",
+          "status": "pending",
+          "testStrategy": "Perform rapid filter and sort changes to confirm 'instantaneous' response. Test the 'Clear All Filters' button. Use Lighthouse or similar tools to check page performance metrics. Conduct a quick UX review to ensure intuitive interaction."
+        }
+      ]
     },
     {
       "id": 5,
@@ -117,7 +287,65 @@
         4
       ],
       "status": "pending",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Develop Core PDP Layout and Static Content Structure",
+          "description": "Create the foundational HTML and CSS structure for the Product Detail Page (PDP). This includes defining sections for product images, title, description, specifications, price, and the 'Add to Cart' area. Use placeholder content for all dynamic elements.",
+          "dependencies": [],
+          "details": "Implement a semantic HTML5 structure. Use CSS Grid or Flexbox for the main layout (e.g., image gallery on one side, product details on the other). Ensure basic styling for readability and visual separation of sections. No dynamic data fetching or interactive elements are required at this stage.",
+          "status": "pending",
+          "testStrategy": "Verify that the basic layout renders correctly across different browsers and that all designated content areas are present and visually distinct."
+        },
+        {
+          "id": 2,
+          "title": "Implement High-Resolution Image Gallery with Zoom",
+          "description": "Develop the interactive image gallery component to display multiple product images. This subtask includes functionality to switch between images (e.g., a carousel or thumbnail navigation) and a zoom feature for detailed viewing of the main image.",
+          "dependencies": [
+            1
+          ],
+          "details": "Integrate a suitable image carousel/slider library (e.g., Swiper, Slick, or a custom JavaScript implementation) for multiple images. Implement a zoom feature for the primary image, either via a lightbox overlay or an inline magnification effect (e.g., using CSS transforms on hover, or a dedicated library). Ensure images are high-resolution and optimized for web display.",
+          "status": "pending",
+          "testStrategy": "Test image switching functionality, zoom activation and clarity, and ensure all images load correctly. Verify responsiveness of the gallery on different screen sizes."
+        },
+        {
+          "id": 3,
+          "title": "Integrate Dynamic Product Data Display",
+          "description": "Fetch and display dynamic product data from an API endpoint. This includes populating the product title, detailed description, price, materials, dimensions, and any other relevant specifications into the pre-defined layout.",
+          "dependencies": [
+            1
+          ],
+          "details": "Define the API endpoint for fetching product details (e.g., `/api/products/{productId}`). Use a data fetching mechanism (e.g., `fetch` API, Axios) to retrieve the data. Map the fetched JSON data to the corresponding HTML elements in the PDP layout. Implement basic loading and error states for data fetching.",
+          "status": "pending",
+          "testStrategy": "Verify that all dynamic product attributes (title, description, price, specs) are correctly displayed after fetching data. Test with valid and invalid product IDs to ensure proper error handling or fallback."
+        },
+        {
+          "id": 4,
+          "title": "Implement 'Add to Cart' Functionality",
+          "description": "Develop the interactive 'Add to Cart' section, including a quantity selector and the logic to add the selected product and quantity to the shopping cart. This involves handling user input and integrating with the cart management system.",
+          "dependencies": [
+            1,
+            3
+          ],
+          "details": "Create a quantity input field (e.g., a number input or custom increment/decrement buttons). Implement an event listener on the 'Add to Cart' button. When clicked, capture the product ID and selected quantity. Integrate with the application's cart state management (e.g., Redux, Context API, or local storage) to add the item. Provide visual feedback to the user upon successful addition (e.g., a temporary message, button state change).",
+          "status": "pending",
+          "testStrategy": "Test adding single and multiple quantities to the cart. Verify that the cart state updates correctly. Test edge cases like zero or negative quantities (if applicable) and ensure appropriate user feedback is provided."
+        },
+        {
+          "id": 5,
+          "title": "Ensure Responsiveness and Basic UI/UX Polish",
+          "description": "Optimize the entire PDP layout and its components for various screen sizes (mobile, tablet, desktop) using responsive design principles. Apply final UI/UX polish to ensure a visually appealing, consistent, and user-friendly experience across devices.",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "details": "Utilize CSS Media Queries or a responsive framework (e.g., Tailwind CSS, Bootstrap) to adjust layout, font sizes, and component stacking for different breakpoints. Ensure proper spacing, alignment, and typography. Optimize image loading for performance on mobile. Address any minor visual inconsistencies or glitches identified during testing. Ensure interactive elements are easily tappable/clickable on touch devices.",
+          "status": "pending",
+          "testStrategy": "Perform thorough testing on various device emulators and actual devices (if possible) to confirm responsiveness. Check for visual regressions, usability issues, and consistent branding across different screen sizes and orientations."
+        }
+      ]
     },
     {
       "id": 6,

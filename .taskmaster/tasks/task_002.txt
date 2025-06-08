@@ -9,3 +9,35 @@ Define fields as per PRD: `product` (name, slug, brand, category, images, price,
 
 # Test Strategy:
 Verify that schemas are correctly defined in Sanity Studio. Confirm sample data can be created and viewed within the CMS.
+
+# Subtasks:
+## 1. Define Core Sanity Schemas: Category and Brand [pending]
+### Dependencies: None
+### Description: Define the Sanity.io content schemas for `category` and `brand` data models. These are foundational and simpler schemas that `product` will depend on.
+### Details:
+Create `category.js` and `brand.js` schema files in the Sanity studio's `schemas` directory. For `category`, define `name` (string) and `slug` (slug, unique). For `brand`, define `name` (string) and `logo` (image). Ensure `slug` fields are configured to auto-generate from the `name` field.
+
+## 2. Define Product Sanity Schema [pending]
+### Dependencies: 2.1
+### Description: Define the Sanity.io content schema for the `product` data model, incorporating references to `category` and `brand`.
+### Details:
+Create `product.js` schema file. Define fields: `name` (string), `slug` (slug, unique), `brand` (reference to `brand` document), `category` (reference to `category` document), `images` (array of images), `price` (number), `description` (block content), `details` (array of objects for key-value pairs), `variants` (array of objects for product variations like size/color with price/stock). Ensure references are correctly configured to point to the respective document types.
+
+## 3. Define Order Sanity Schema [pending]
+### Dependencies: 2.2
+### Description: Define the Sanity.io content schema for the `order` data model.
+### Details:
+Create `order.js` schema file. Define fields: `orderId` (string, unique), `userEmail` (string, email validation), `items` (array of objects, each containing a reference to `product` and a `quantity` number), `totalAmount` (number), `shippingAddress` (object with address fields like street, city, postalCode, country), `status` (string, enum/list of options like 'pending', 'processing', 'shipped', 'delivered', 'cancelled'). Consider making `orderId` auto-generated or using a custom input component.
+
+## 4. Populate Initial Sample Data: Categories and Brands [pending]
+### Dependencies: 2.1
+### Description: Populate the Sanity CMS with initial sample data for `category` and `brand` documents. This data will be used for development and testing, and will be referenced by product data.
+### Details:
+Manually create 3-5 sample `category` documents (e.g., 'Electronics', 'Apparel', 'Home Goods') and 3-5 sample `brand` documents (e.g., 'Acme Corp', 'Globex Inc.', 'Cyberdyne Systems') directly within the Sanity Studio UI. Ensure slugs are generated correctly and logos are uploaded for brands.
+
+## 5. Populate Initial Sample Data: Products and Orders [pending]
+### Dependencies: 2.2, 2.3, 2.4
+### Description: Populate the Sanity CMS with initial sample data for `product` and `order` documents, referencing the previously created categories and brands.
+### Details:
+Manually create 5-10 sample `product` documents in the Sanity Studio. For each product, select appropriate categories and brands from the dropdowns populated in the previous step. Upload multiple images, add descriptions, and define variants. Create 2-3 sample `order` documents, ensuring they reference some of the newly created products in their `items` array and have realistic `totalAmount` and `shippingAddress` details.
+

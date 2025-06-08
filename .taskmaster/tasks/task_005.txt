@@ -9,3 +9,35 @@ Support multiple images, potentially video or 360° views (as a future enhanceme
 
 # Test Strategy:
 Verify all product information is displayed correctly. Test image gallery functionality and zoom. Confirm "Add to Cart" button is visible and clickable.
+
+# Subtasks:
+## 1. Develop Core PDP Layout and Static Content Structure [pending]
+### Dependencies: None
+### Description: Create the foundational HTML and CSS structure for the Product Detail Page (PDP). This includes defining sections for product images, title, description, specifications, price, and the 'Add to Cart' area. Use placeholder content for all dynamic elements.
+### Details:
+Implement a semantic HTML5 structure. Use CSS Grid or Flexbox for the main layout (e.g., image gallery on one side, product details on the other). Ensure basic styling for readability and visual separation of sections. No dynamic data fetching or interactive elements are required at this stage.
+
+## 2. Implement High-Resolution Image Gallery with Zoom [pending]
+### Dependencies: 5.1
+### Description: Develop the interactive image gallery component to display multiple product images. This subtask includes functionality to switch between images (e.g., a carousel or thumbnail navigation) and a zoom feature for detailed viewing of the main image.
+### Details:
+Integrate a suitable image carousel/slider library (e.g., Swiper, Slick, or a custom JavaScript implementation) for multiple images. Implement a zoom feature for the primary image, either via a lightbox overlay or an inline magnification effect (e.g., using CSS transforms on hover, or a dedicated library). Ensure images are high-resolution and optimized for web display.
+
+## 3. Integrate Dynamic Product Data Display [pending]
+### Dependencies: 5.1
+### Description: Fetch and display dynamic product data from an API endpoint. This includes populating the product title, detailed description, price, materials, dimensions, and any other relevant specifications into the pre-defined layout.
+### Details:
+Define the API endpoint for fetching product details (e.g., `/api/products/{productId}`). Use a data fetching mechanism (e.g., `fetch` API, Axios) to retrieve the data. Map the fetched JSON data to the corresponding HTML elements in the PDP layout. Implement basic loading and error states for data fetching.
+
+## 4. Implement 'Add to Cart' Functionality [pending]
+### Dependencies: 5.1, 5.3
+### Description: Develop the interactive 'Add to Cart' section, including a quantity selector and the logic to add the selected product and quantity to the shopping cart. This involves handling user input and integrating with the cart management system.
+### Details:
+Create a quantity input field (e.g., a number input or custom increment/decrement buttons). Implement an event listener on the 'Add to Cart' button. When clicked, capture the product ID and selected quantity. Integrate with the application's cart state management (e.g., Redux, Context API, or local storage) to add the item. Provide visual feedback to the user upon successful addition (e.g., a temporary message, button state change).
+
+## 5. Ensure Responsiveness and Basic UI/UX Polish [pending]
+### Dependencies: 5.1, 5.2, 5.3, 5.4
+### Description: Optimize the entire PDP layout and its components for various screen sizes (mobile, tablet, desktop) using responsive design principles. Apply final UI/UX polish to ensure a visually appealing, consistent, and user-friendly experience across devices.
+### Details:
+Utilize CSS Media Queries or a responsive framework (e.g., Tailwind CSS, Bootstrap) to adjust layout, font sizes, and component stacking for different breakpoints. Ensure proper spacing, alignment, and typography. Optimize image loading for performance on mobile. Address any minor visual inconsistencies or glitches identified during testing. Ensure interactive elements are easily tappable/clickable on touch devices.
+

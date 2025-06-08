@@ -120,3 +120,35 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Custom zoom and scale utilities */
+  .scale-200 {
+    transform: scale(2);
+  }
+
+  .cursor-zoom-in {
+    cursor: zoom-in;
+  }
+
+  .cursor-zoom-out {
+    cursor: zoom-out;
+  }
+
+  /* Custom backdrop blur for older browsers */
+  .backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+  }
+
+  /* Smooth transitions for image gallery */
+  .transition-transform-300 {
+    transition: transform 0.3s ease-in-out;
+  }
+}

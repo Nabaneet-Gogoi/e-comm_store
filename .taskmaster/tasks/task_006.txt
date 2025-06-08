@@ -9,3 +9,35 @@ Use Zustand or React Context for state management. The side-drawer should appear
 
 # Test Strategy:
 Test adding various products, updating quantities, and removing items. Verify cart total and item counts are accurate. Confirm side-drawer opens and displays correct summary.
+
+# Subtasks:
+## 1. Set up Cart State Management and Basic Add/Remove Actions [pending]
+### Dependencies: None
+### Description: Initialize the client-side shopping cart state using Zustand or React Context. Define the data structure for cart items (e.g., `id`, `name`, `price`, `quantity`). Implement core actions to add a new item to the cart and remove an item from the cart by its ID.
+### Details:
+Choose either Zustand or React Context for state management. The `addItem` action should handle cases where the item already exists in the cart (increment quantity) and where it's a new item. The `removeItem` action should completely remove the item from the cart array.
+
+## 2. Implement Cart Quantity Updates and Summary Calculations [pending]
+### Dependencies: 6.1
+### Description: Extend the cart state management to include functionality for updating the quantity of an existing item. Develop utility functions or selectors to dynamically calculate the total number of unique items in the cart and the total monetary value of all items in the cart.
+### Details:
+The `updateItemQuantity` action should take an item ID and a new quantity. It should handle decrementing quantities, potentially removing the item if the quantity becomes zero or less. The total item count and total price calculations should be derived from the current cart state.
+
+## 3. Integrate 'Add to Cart' UI and Basic Cart Indicator [pending]
+### Dependencies: 6.2
+### Description: Connect the `addItem` action to a user interface element, such as an 'Add to Cart' button on a product detail page or product listing. Implement a simple, persistent cart indicator (e.g., an icon with an item count badge) in the application's header or navigation bar that reflects the current number of items in the cart.
+### Details:
+The 'Add to Cart' button should pass the necessary product data (ID, name, price, initial quantity) to the `addItem` action. The cart indicator component should subscribe to the cart state to display the current total item count.
+
+## 4. Develop the Shopping Cart Side-Drawer UI Component [pending]
+### Dependencies: 6.3
+### Description: Create a dedicated React component for the shopping cart side-drawer. This component will display the list of items currently in the cart, including item name, quantity, and individual item price. It should also include interactive UI elements (buttons/inputs) to remove items and update item quantities directly within the drawer.
+### Details:
+The side-drawer component should consume the cart state to render its contents. Each cart item displayed should have a 'Remove' button that triggers the `removeItem` action and a quantity input/stepper that triggers the `updateItemQuantity` action. Display the calculated total price at the bottom of the drawer.
+
+## 5. Implement Side-Drawer Visibility Logic and UX [pending]
+### Dependencies: 6.4
+### Description: Implement the logic to control the visibility of the shopping cart side-drawer. The drawer should automatically open when an item is successfully added to the cart via the 'Add to Cart' button. Provide a clear mechanism (e.g., a close button, clicking outside the drawer) to close the drawer, ensuring a non-intrusive user experience.
+### Details:
+Manage the drawer's open/closed state (e.g., using a boolean state variable). After an `addItem` action is dispatched, set the drawer's state to open. Implement an overlay or click handler to close the drawer when clicking outside, and a dedicated close button within the drawer. Ensure smooth transitions for opening/closing.
+

@@ -358,7 +358,61 @@
         5
       ],
       "status": "pending",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Set up Cart State Management and Basic Add/Remove Actions",
+          "description": "Initialize the client-side shopping cart state using Zustand or React Context. Define the data structure for cart items (e.g., `id`, `name`, `price`, `quantity`). Implement core actions to add a new item to the cart and remove an item from the cart by its ID.",
+          "dependencies": [],
+          "details": "Choose either Zustand or React Context for state management. The `addItem` action should handle cases where the item already exists in the cart (increment quantity) and where it's a new item. The `removeItem` action should completely remove the item from the cart array.",
+          "status": "pending",
+          "testStrategy": "Unit tests for the state management store/context: verify `addItem` adds new items or increments quantity, and `removeItem` correctly removes items."
+        },
+        {
+          "id": 2,
+          "title": "Implement Cart Quantity Updates and Summary Calculations",
+          "description": "Extend the cart state management to include functionality for updating the quantity of an existing item. Develop utility functions or selectors to dynamically calculate the total number of unique items in the cart and the total monetary value of all items in the cart.",
+          "dependencies": [
+            1
+          ],
+          "details": "The `updateItemQuantity` action should take an item ID and a new quantity. It should handle decrementing quantities, potentially removing the item if the quantity becomes zero or less. The total item count and total price calculations should be derived from the current cart state.",
+          "status": "pending",
+          "testStrategy": "Unit tests for `updateItemQuantity` (increment, decrement, remove on zero) and for the total item count and total price selectors/functions with various cart states."
+        },
+        {
+          "id": 3,
+          "title": "Integrate 'Add to Cart' UI and Basic Cart Indicator",
+          "description": "Connect the `addItem` action to a user interface element, such as an 'Add to Cart' button on a product detail page or product listing. Implement a simple, persistent cart indicator (e.g., an icon with an item count badge) in the application's header or navigation bar that reflects the current number of items in the cart.",
+          "dependencies": [
+            2
+          ],
+          "details": "The 'Add to Cart' button should pass the necessary product data (ID, name, price, initial quantity) to the `addItem` action. The cart indicator component should subscribe to the cart state to display the current total item count.",
+          "status": "pending",
+          "testStrategy": "Manual testing: Click 'Add to Cart' and verify the item count in the indicator updates. Automated E2E test: Simulate adding an item and assert the cart indicator reflects the correct count."
+        },
+        {
+          "id": 4,
+          "title": "Develop the Shopping Cart Side-Drawer UI Component",
+          "description": "Create a dedicated React component for the shopping cart side-drawer. This component will display the list of items currently in the cart, including item name, quantity, and individual item price. It should also include interactive UI elements (buttons/inputs) to remove items and update item quantities directly within the drawer.",
+          "dependencies": [
+            3
+          ],
+          "details": "The side-drawer component should consume the cart state to render its contents. Each cart item displayed should have a 'Remove' button that triggers the `removeItem` action and a quantity input/stepper that triggers the `updateItemQuantity` action. Display the calculated total price at the bottom of the drawer.",
+          "status": "pending",
+          "testStrategy": "Component tests for the SideDrawer: Render with mock cart data and verify all items, quantities, prices, and total are displayed correctly. Simulate clicks on remove/quantity buttons and assert the correct actions are dispatched."
+        },
+        {
+          "id": 5,
+          "title": "Implement Side-Drawer Visibility Logic and UX",
+          "description": "Implement the logic to control the visibility of the shopping cart side-drawer. The drawer should automatically open when an item is successfully added to the cart via the 'Add to Cart' button. Provide a clear mechanism (e.g., a close button, clicking outside the drawer) to close the drawer, ensuring a non-intrusive user experience.",
+          "dependencies": [
+            4
+          ],
+          "details": "Manage the drawer's open/closed state (e.g., using a boolean state variable). After an `addItem` action is dispatched, set the drawer's state to open. Implement an overlay or click handler to close the drawer when clicking outside, and a dedicated close button within the drawer. Ensure smooth transitions for opening/closing.",
+          "status": "pending",
+          "testStrategy": "Manual testing: Add an item and verify the drawer opens. Click close button/outside and verify it closes. Automated E2E test: Simulate adding an item and assert the drawer is visible. Simulate closing and assert it's hidden."
+        }
+      ]
     },
     {
       "id": 7,
@@ -371,7 +425,62 @@
         6
       ],
       "status": "pending",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Implement Shipping Address Collection UI",
+          "description": "Develop the frontend UI for the initial step of the checkout process, allowing users to input and validate shipping addresses. This includes fields for recipient name, address lines, city, state/province, postal code, and country.",
+          "dependencies": [],
+          "details": "Create a dedicated React/Vue/Angular component for the shipping form. Implement client-side validation for all required fields and basic format checks (e.g., postal code patterns). Store collected data temporarily in component state or a global store for subsequent steps.",
+          "status": "pending",
+          "testStrategy": "Manually test form submission, observe validation messages for empty or invalid fields, and verify that entered data is correctly captured and persists within the component's state."
+        },
+        {
+          "id": 2,
+          "title": "Integrate Stripe.js Payment Element UI",
+          "description": "Develop the frontend UI for the payment step, integrating Stripe.js to securely collect payment information using Stripe's PCI-compliant Payment Element. This ensures sensitive card data never touches your servers.",
+          "dependencies": [
+            1
+          ],
+          "details": "Initialize Stripe.js with your publishable key. Mount the `Elements` provider and then the `PaymentElement` component within your checkout flow. Ensure proper styling to match your application's theme and implement display of real-time validation errors provided by Stripe's UI.",
+          "status": "pending",
+          "testStrategy": "Verify that the Payment Element loads correctly and displays all necessary fields. Use Stripe's test card numbers (e.g., 4242... for success, 4000... for decline) to observe real-time validation feedback and ensure the element behaves as expected."
+        },
+        {
+          "id": 3,
+          "title": "Develop Serverless Function for Stripe Payment Intent Management",
+          "description": "Create a serverless function (e.g., AWS Lambda, Azure Function, Google Cloud Function, or Vercel/Netlify function) responsible for creating and confirming Stripe Payment Intents. This function will handle the server-side logic for payment processing.",
+          "dependencies": [
+            2
+          ],
+          "details": "The function should expose two main endpoints/actions: one to create a Payment Intent (returning its `client_secret` to the frontend) and another to confirm a Payment Intent (receiving the `payment_method_id` from the client). Use the Stripe Node.js SDK for API interactions. Implement idempotency keys for Payment Intent creation to prevent duplicate charges.",
+          "status": "pending",
+          "testStrategy": "Use a tool like Postman or curl to directly call the serverless function endpoints. Test creating a Payment Intent and confirming it with a mock payment method ID. Verify the Payment Intent status changes correctly in the Stripe Dashboard (e.g., from 'requires_payment_method' to 'succeeded')."
+        },
+        {
+          "id": 4,
+          "title": "Implement Client-Side Payment Submission and Order Review",
+          "description": "Connect the client-side Payment Element with the serverless function to complete the payment process. After a successful payment, transition to an order review step displaying all collected shipping information and a summary of the order before final confirmation.",
+          "dependencies": [
+            2,
+            3
+          ],
+          "details": "On payment form submission, call your serverless function (Subtask 3) to create a Payment Intent and obtain its `client_secret`. Then, use `stripe.confirmPayment` or `stripe.confirmCardPayment` with the `client_secret` and the `PaymentElement`. Handle success and failure responses from Stripe. Upon success, transition to a 'Review Order' step that aggregates and displays all collected shipping details and order items/total.",
+          "status": "pending",
+          "testStrategy": "Perform end-to-end checkout using various Stripe test cards (success, failure, 3D Secure scenarios). Verify that the payment process completes correctly, and the order review screen accurately reflects all shipping details and the final order summary."
+        },
+        {
+          "id": 5,
+          "title": "Add Comprehensive Error Handling and Flow Finalization",
+          "description": "Implement robust error handling across the entire checkout flow, provide clear and user-friendly feedback for all scenarios (success, failure, validation errors), and finalize the overall user experience.",
+          "dependencies": [
+            4
+          ],
+          "details": "Implement error boundaries or try-catch blocks for all API calls (both client-side and serverless). Display user-friendly messages for Stripe errors, network issues, and server-side validation failures. Add loading states during asynchronous operations, clear success messages post-checkout, and ensure proper redirection or state updates. Address edge cases like browser refresh during the checkout process.",
+          "status": "pending",
+          "testStrategy": "Systematically test all error paths: invalid shipping data, declined credit cards, network errors during API calls, and server-side errors. Verify that appropriate user feedback is displayed, the flow handles these gracefully, and the user is guided towards resolution or retry."
+        }
+      ]
     },
     {
       "id": 8,
@@ -384,7 +493,61 @@
         1
       ],
       "status": "pending",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Set Up Authentication Framework and Database Schema",
+          "description": "Select and integrate the chosen authentication framework (e.g., NextAuth.js) or set up a custom authentication structure. Define the user schema in the database, including fields for email, hashed password, and potentially roles/metadata.",
+          "dependencies": [],
+          "details": "If using NextAuth.js, install it and configure the basic provider(s) (e.g., Credentials provider). If custom, set up bcrypt for password hashing and define the user model in your ORM/database. Ensure unique email constraint and appropriate indexing for user lookup.",
+          "status": "pending",
+          "testStrategy": "Verify framework installation and basic configuration. Confirm database schema creation and ability to connect to the user collection/table."
+        },
+        {
+          "id": 2,
+          "title": "Develop User Registration (Sign-Up) Endpoint",
+          "description": "Create an API endpoint and associated logic for new user registration. This involves receiving user credentials (email, password), hashing the password securely, and storing the user in the database.",
+          "dependencies": [
+            1
+          ],
+          "details": "Implement input validation for email format and password strength. Use `bcrypt.hash` with a suitable salt rounds (e.g., 10-12) to securely hash passwords. Handle cases where an email already exists by returning an appropriate error. Ensure the endpoint is protected against common vulnerabilities like mass assignment.",
+          "status": "pending",
+          "testStrategy": "Test successful user registration with valid credentials. Test registration with existing email. Test with invalid email format or weak password. Verify password hashing in the database."
+        },
+        {
+          "id": 3,
+          "title": "Implement User Login and Session Creation",
+          "description": "Develop the API endpoint and logic for user login. This involves verifying provided credentials against stored hashed passwords and, upon successful authentication, establishing a secure user session.",
+          "dependencies": [
+            2
+          ],
+          "details": "Use `bcrypt.compare` to verify the provided password against the stored hash. If using NextAuth.js, configure the `signIn` function. If custom, generate a secure session token (e.g., JWT or server-side session ID) and store it securely (e.g., in an HTTP-only, secure cookie). Implement rate limiting on login attempts to prevent brute-force attacks.",
+          "status": "pending",
+          "testStrategy": "Test successful login with correct credentials. Test login with incorrect password/email. Test login with locked accounts (if applicable). Verify session creation and cookie/token presence."
+        },
+        {
+          "id": 4,
+          "title": "Develop User Logout Endpoint",
+          "description": "Create an API endpoint and logic to allow authenticated users to log out. This involves invalidating or terminating the active user session.",
+          "dependencies": [
+            3
+          ],
+          "details": "If using NextAuth.js, use the `signOut` function. If custom, clear the session cookie or invalidate the session token on the server-side. Ensure the logout process is robust and handles various session types (e.g., JWT expiration, server-side session destruction).",
+          "status": "pending",
+          "testStrategy": "Test successful logout for an authenticated user. Verify that subsequent requests with the old session token/cookie are rejected. Test logout for a non-authenticated user (should gracefully fail)."
+        },
+        {
+          "id": 5,
+          "title": "Implement Secure Session Management and Security Hardening",
+          "description": "Refine session management to ensure security and persistence. This includes implementing features like session expiration, refresh tokens (if applicable), and applying general security best practices across the authentication system.",
+          "dependencies": [
+            3
+          ],
+          "details": "For NextAuth.js, configure session strategies (JWT vs. database), session expiry, and callbacks for token rotation. For custom solutions, implement token refresh mechanisms, secure cookie flags (HttpOnly, Secure, SameSite=Lax/Strict), and proper error handling to avoid information leakage. Consider CSRF protection for state-changing requests.",
+          "status": "pending",
+          "testStrategy": "Verify session expiration and renewal (if refresh tokens are used). Check cookie flags (HttpOnly, Secure, SameSite). Test for CSRF vulnerability. Verify that sensitive information is not exposed in error messages."
+        }
+      ]
     },
     {
       "id": 9,

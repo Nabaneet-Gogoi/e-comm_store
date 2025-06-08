@@ -9,3 +9,35 @@ Ensure PCI compliance by using Stripe's secure UI elements. Handle shipping addr
 
 # Test Strategy:
 Conduct end-to-end testing of the checkout flow with test Stripe credentials. Verify successful payment processing and order creation in Sanity (if `order` schema is used for this).
+
+# Subtasks:
+## 1. Implement Shipping Address Collection UI [pending]
+### Dependencies: None
+### Description: Develop the frontend UI for the initial step of the checkout process, allowing users to input and validate shipping addresses. This includes fields for recipient name, address lines, city, state/province, postal code, and country.
+### Details:
+Create a dedicated React/Vue/Angular component for the shipping form. Implement client-side validation for all required fields and basic format checks (e.g., postal code patterns). Store collected data temporarily in component state or a global store for subsequent steps.
+
+## 2. Integrate Stripe.js Payment Element UI [pending]
+### Dependencies: 7.1
+### Description: Develop the frontend UI for the payment step, integrating Stripe.js to securely collect payment information using Stripe's PCI-compliant Payment Element. This ensures sensitive card data never touches your servers.
+### Details:
+Initialize Stripe.js with your publishable key. Mount the `Elements` provider and then the `PaymentElement` component within your checkout flow. Ensure proper styling to match your application's theme and implement display of real-time validation errors provided by Stripe's UI.
+
+## 3. Develop Serverless Function for Stripe Payment Intent Management [pending]
+### Dependencies: 7.2
+### Description: Create a serverless function (e.g., AWS Lambda, Azure Function, Google Cloud Function, or Vercel/Netlify function) responsible for creating and confirming Stripe Payment Intents. This function will handle the server-side logic for payment processing.
+### Details:
+The function should expose two main endpoints/actions: one to create a Payment Intent (returning its `client_secret` to the frontend) and another to confirm a Payment Intent (receiving the `payment_method_id` from the client). Use the Stripe Node.js SDK for API interactions. Implement idempotency keys for Payment Intent creation to prevent duplicate charges.
+
+## 4. Implement Client-Side Payment Submission and Order Review [pending]
+### Dependencies: 7.2, 7.3
+### Description: Connect the client-side Payment Element with the serverless function to complete the payment process. After a successful payment, transition to an order review step displaying all collected shipping information and a summary of the order before final confirmation.
+### Details:
+On payment form submission, call your serverless function (Subtask 3) to create a Payment Intent and obtain its `client_secret`. Then, use `stripe.confirmPayment` or `stripe.confirmCardPayment` with the `client_secret` and the `PaymentElement`. Handle success and failure responses from Stripe. Upon success, transition to a 'Review Order' step that aggregates and displays all collected shipping details and order items/total.
+
+## 5. Add Comprehensive Error Handling and Flow Finalization [pending]
+### Dependencies: 7.4
+### Description: Implement robust error handling across the entire checkout flow, provide clear and user-friendly feedback for all scenarios (success, failure, validation errors), and finalize the overall user experience.
+### Details:
+Implement error boundaries or try-catch blocks for all API calls (both client-side and serverless). Display user-friendly messages for Stripe errors, network issues, and server-side validation failures. Add loading states during asynchronous operations, clear success messages post-checkout, and ensure proper redirection or state updates. Address edge cases like browser refresh during the checkout process.
+

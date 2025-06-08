@@ -18,16 +18,20 @@ interface CartContextType {
   items: CartItem[]
   totalItems: number
   totalPrice: number
+  isDrawerOpen: boolean
   addItem: (item: Omit<CartItem, 'totalPrice'>) => void
   removeItem: (id: string, variant?: ProductVariant) => void
   updateQuantity: (id: string, quantity: number, variant?: ProductVariant) => void
   clearCart: () => void
+  openDrawer: () => void
+  closeDrawer: () => void
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   // Load cart from localStorage on mount
   useEffect(() => {
@@ -72,6 +76,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         }]
       }
     })
+    
+    // Auto-open drawer when item is added
+    setIsDrawerOpen(true)
   }
 
   const removeItem = (id: string, variant?: ProductVariant) => {
@@ -106,15 +113,26 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems([])
   }
 
+  const openDrawer = () => {
+    setIsDrawerOpen(true)
+  }
+
+  const closeDrawer = () => {
+    setIsDrawerOpen(false)
+  }
+
   return (
     <CartContext.Provider value={{
       items,
       totalItems,
       totalPrice,
+      isDrawerOpen,
       addItem,
       removeItem,
       updateQuantity,
-      clearCart
+      clearCart,
+      openDrawer,
+      closeDrawer
     }}>
       {children}
     </CartContext.Provider>
